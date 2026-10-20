@@ -91,12 +91,6 @@ Os valores finais devem ser preenchidos após executar os notebooks. Não há um
 
 O treinamento pode levar algum tempo, dependendo do hardware e dos recursos disponíveis.
 
-## ⚠️ Observação sobre a comparação
-
-Na versão atual dos notebooks, as imagens são redimensionadas para resoluções diferentes: **128 × 128 na ResNet50** e **224 × 224 na EfficientNetB0**. Portanto, os experimentos não diferem exclusivamente pela arquitetura.
-
-Para uma comparação mais controlada, recomenda-se utilizar a mesma resolução, a mesma divisão entre treino, validação e teste, as mesmas condições de treinamento e a mesma semente aleatória nos dois notebooks. Assim, as diferenças observadas poderão ser atribuídas com mais confiança à arquitetura utilizada.
-
 ## 👩‍🏫 Informações acadêmicas
 
 - **Disciplina:** Redes Neurais Artificiais
