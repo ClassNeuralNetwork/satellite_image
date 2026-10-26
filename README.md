@@ -2,73 +2,74 @@
 
 Projeto desenvolvido para a disciplina **Redes Neurais Artificiais**, como avaliação da **Unidade 2**, ministrada pela professora **Rosana Cibely**.
 
-O objetivo é comparar duas arquiteturas de redes neurais convolucionais aplicadas à classificação de imagens de satélite e analisar qual delas apresenta os melhores resultados para o problema proposto.
+O objetivo é comparar duas arquiteturas de redes neurais convolucionais aplicadas à classificação de imagens de satélite, analisando seu desempenho na identificação de quatro categorias de cobertura e condições da superfície terrestre.
 
-## 🎯 Objetivo
+## Objetivo
 
-Investigar e comparar o desempenho das arquiteturas **ResNet50** e **EfficientNetB0** na classificação de imagens de satélite. A proposta é manter o problema e o fluxo geral de treinamento semelhantes, alterando a arquitetura utilizada, e avaliar os resultados por meio de métricas de classificação.
+Investigar e comparar o desempenho das arquiteturas **ResNet50** e **EfficientNetB0** na classificação de imagens de satélite. O projeto utiliza modelos pré-treinados no ImageNet por meio de *Transfer Learning* e avalia os resultados com métricas de classificação, matrizes de confusão e visualizações das previsões.
 
-A conclusão será baseada nos resultados obtidos durante os experimentos, sem assumir antecipadamente que uma arquitetura é superior à outra.
+A análise busca identificar as diferenças entre os modelos nas condições experimentais adotadas, sem assumir antecipadamente que uma arquitetura é superior à outra.
 
-## 🛰️ Dataset
+## Dataset
 
-Foi utilizado o dataset **Satellite Image Classification**, disponibilizado por Mahmoud Reda no Kaggle:
+Foi utilizado o dataset **Satellite Image Classification**, disponibilizado por Mahmoud Reda no Kaggle.
 
-🔗 [Acessar o dataset no Kaggle](https://www.kaggle.com/datasets/mahmoudreda55/satellite-image-classification/code)
+[**Acessar o dataset no Kaggle**](https://www.kaggle.com/datasets/mahmoudreda55/satellite-image-classification/code)
 
-O conjunto de dados possui quatro classes de imagens:
+O conjunto possui **5.631 imagens**, distribuídas em quatro classes:
 
-- **Cloudy** — áreas com nuvens;
-- **Desert** — regiões desérticas;
-- **Green area** — áreas verdes;
-- **Water** — regiões com água.
+- **Cloudy** — imagens de áreas com nuvens;
+- **Desert** — imagens de regiões desérticas;
+- **Green area** — imagens de áreas verdes;
+- **Water** — imagens de regiões com água.
 
-O download do conjunto de dados é realizado nos notebooks com a biblioteca `kagglehub`.
+As imagens apresentam diferenças de dimensão e formato de cor. Por isso, os notebooks incluem etapas de preparação e conversão para RGB, além do redimensionamento conforme a entrada exigida por cada arquitetura. O download do conjunto de dados é realizado com a biblioteca `kagglehub`.
 
-## 🧠 Modelos avaliados
+## Modelos avaliados
 
-### 1. ResNet50
+### ResNet50
 
-A ResNet50 é uma rede neural convolucional que utiliza conexões residuais (*residual connections*) para facilitar o treinamento de redes profundas. Neste projeto, é utilizada com pesos pré-treinados no ImageNet e sem a camada de classificação original (`include_top=False`).
+A **ResNet50** é uma rede neural convolucional que utiliza conexões residuais (*residual connections*) para facilitar o treinamento de redes profundas. Neste projeto, é utilizada com pesos pré-treinados no ImageNet e sem a camada de classificação original (`include_top=False`).
 
-### 2. EfficientNetB0
+### EfficientNetB0
 
-A EfficientNetB0 é uma arquitetura que busca equilibrar desempenho e eficiência por meio do escalonamento de profundidade, largura e resolução. Assim como na ResNet50, são utilizados pesos pré-treinados no ImageNet e uma nova camada de classificação adaptada às quatro classes do dataset.
+A **EfficientNetB0** é uma arquitetura que busca equilibrar desempenho e eficiência por meio do escalonamento conjunto de profundidade, largura e resolução. Assim como na ResNet50, são utilizados pesos pré-treinados no ImageNet e uma nova camada de classificação adaptada às quatro classes do dataset.
 
-### Camadas de classificação
+### Camadas de classificação e treinamento
 
-Nos dois notebooks, a base pré-treinada é congelada e conectada a uma cabeça de classificação composta por:
+Nos dois notebooks, a base convolucional pré-treinada é congelada e conectada a uma cabeça de classificação composta por:
 
 - `GlobalAveragePooling2D`;
 - camada densa com 128 neurônios e ativação ReLU;
 - `Dropout(0.5)`;
 - camada de saída com 4 neurônios e ativação Softmax.
 
-A configuração usa o otimizador Adam, taxa de aprendizado inicial de `0.001` e função de perda `sparse_categorical_crossentropy`. O treinamento também utiliza parada antecipada (*Early Stopping*).
+A configuração de treinamento utiliza o otimizador Adam, taxa de aprendizado inicial de `0.001` e função de perda `sparse_categorical_crossentropy`. Também é utilizada parada antecipada (*Early Stopping*) para interromper o treinamento quando não há melhora na métrica monitorada, conforme a configuração do notebook.
 
-## 📓 Notebooks
+## Notebooks
 
 | Notebook | Arquitetura | Entrada das imagens |
 |---|---|---|
 | `Projeto2satelite.ipynb` | ResNet50 | 128 × 128 pixels |
 | `EfficientNetB0_satelite (2).ipynb` | EfficientNetB0 | 224 × 224 pixels |
 
-Cada notebook inclui etapas de exploração do dataset, preparação das imagens, treinamento, avaliação e visualização dos resultados.
+Cada notebook contém etapas de exploração do dataset, preparação das imagens, configuração e treinamento do modelo, avaliação e visualização dos resultados.
 
-## 📊 Como os modelos serão comparados
+## Como os modelos serão comparados
 
-A análise considera as seguintes métricas e recursos:
+A comparação considera diferentes aspectos do desempenho dos classificadores:
 
-- **Acurácia no teste:** proporção total de previsões corretas;
+- **Acurácia no teste:** proporção de previsões corretas em relação ao total de imagens avaliadas;
 - **Loss:** valor da função de perda durante o treinamento e a avaliação;
-- **Precisão, recall e F1-score:** desempenho geral e por classe;
-- **Matriz de confusão:** classes que são mais facilmente reconhecidas ou confundidas;
-- **Curvas de treinamento e validação:** comportamento da acurácia e da perda ao longo das épocas;
-- **Exemplos de predição:** comparação entre a classe real e a classe prevista, acompanhada da confiança estimada pelo modelo.
+- **Precisão, recall e F1-score:** desempenho geral e desempenho individual por classe;
+- **Matriz de confusão:** distribuição dos acertos e erros entre as classes;
+- **Curvas de treinamento e validação:** evolução da acurácia e da perda ao longo das épocas;
+- **Exemplos de predição:** comparação entre a classe real e a classe prevista, com a confiança estimada pelo modelo;
+- **SHAP:** análise exploratória de regiões das imagens que contribuem para previsões selecionadas.
 
-Os valores finais devem ser preenchidos após executar os notebooks. Não há um vencedor definido previamente: a melhor arquitetura será aquela que apresentar resultados mais adequados considerando as métricas observadas e o comportamento no conjunto de teste.
+Os resultados devem ser interpretados considerando as configurações de cada experimento, incluindo as diferentes resoluções de entrada. A comparação também depende de garantir que os conjuntos de treinamento, validação e teste sejam independentes. Não há um vencedor definido previamente: a conclusão deve se basear nas métricas obtidas e nas condições em que os modelos foram avaliados.
 
-## ⚙️ Tecnologias utilizadas
+## Tecnologias utilizadas
 
 - Python
 - TensorFlow / Keras
@@ -80,24 +81,55 @@ Os valores finais devem ser preenchidos após executar os notebooks. Não há um
 - KaggleHub
 - SHAP, para explorar explicações das previsões
 
-## ▶️ Como executar
+## Como executar
 
-1. Abra o notebook desejado no **Google Colab** ou em um ambiente Jupyter com suporte a TensorFlow.
-2. Instale as dependências necessárias caso ainda não estejam disponíveis no ambiente.
-3. Execute as células na ordem apresentada.
-4. Permita que o `kagglehub` baixe o dataset.
-5. Aguarde o treinamento e a avaliação.
-6. Registre os resultados de cada modelo e compare as métricas e os gráficos gerados.
+1. Abra o notebook desejado no **Google Colab** ou em um ambiente Jupyter com suporte ao TensorFlow.
+2. Instale as dependências necessárias, caso ainda não estejam disponíveis no ambiente.
+3. Execute as células do notebook na ordem apresentada.
+4. Aguarde o download do dataset pelo `kagglehub`.
+5. Execute o treinamento e as etapas de avaliação.
+6. Analise os gráficos e as métricas geradas e compare os resultados dos dois modelos.
 
-O treinamento pode levar algum tempo, dependendo do hardware e dos recursos disponíveis.
+O tempo de execução pode variar de acordo com o hardware e os recursos disponíveis. O uso de GPU, quando disponível, pode ajudar a acelerar o treinamento.
 
-## 👩‍🏫 Informações acadêmicas
+## Informações acadêmicas
 
 - **Disciplina:** Redes Neurais Artificiais
 - **Avaliação:** Unidade 2
 - **Professora:** Rosana Cibely
-- **Tema:** comparação de arquiteturas de redes neurais para classificação de imagens de satélite
+- **Tema:** comparação de arquiteturas de redes neurais convolucionais para classificação de imagens de satélite
+
+## Contribuição
+
+Contribuições são bem-vindas! Se você quiser contribuir para este projeto, abra uma *issue* para discutir as mudanças propostas ou envie um *pull request*.
+
+## Equipe
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://github.com/franciscalorraynes">
+        <img src="https://avatars.githubusercontent.com/u/104534319?v=4" width="120px;" alt="Foto de Francisca Lorrayne no GitHub"/><br>
+        <sub><b>Francisca Lorrayne</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/samirafq">
+        <img src="https://avatars.githubusercontent.com/u/111064435?v=4" width="120px;" alt="Foto de Samira França no GitHub"/><br>
+        <sub><b>Samira França</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
+
+<p align="center">
+Cada contribuidora desempenhou um papel essencial no desenvolvimento e aprimoramento deste projeto.
+</p>
 
 ---
 
 Desenvolvido para fins acadêmicos e de estudo em aprendizado profundo.
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para obter mais informações.
