@@ -50,7 +50,7 @@ A configuração de treinamento utiliza o otimizador Adam, taxa de aprendizado i
 
 | Notebook | Arquitetura | Entrada das imagens |
 |---|---|---|
-| `Projeto2satelite.ipynb` | ResNet50 | 128 × 128 pixels |
+| `Projeto2sateliteResNet50.ipynb` | ResNet50 | 128 × 128 pixels |
 | `EfficientNetB0_satelite (2).ipynb` | EfficientNetB0 | 224 × 224 pixels |
 
 Cada notebook contém etapas de exploração do dataset, preparação das imagens, configuração e treinamento do modelo, avaliação e visualização dos resultados.
